@@ -46,6 +46,9 @@ jobs:
         RUN apt-get update && apt-get install -y build-essential uuid-dev iasl git nasm python3-distutils
         WORKDIR /workspace
         COPY . .
+        RUN mkdir -p edk2/OvmfPkg/IntelGop edk2/OvmfPkg/Vbt
+        RUN cp gop/IntelGopDriver.efi edk2/OvmfPkg/IntelGop/IntelGopDriver.efi
+        RUN cp gop/Vbt.bin edk2/OvmfPkg/Vbt/Vbt.bin
         RUN chmod +x build_ovmf.sh
         CMD ["./build_ovmf.sh"]
         EOF

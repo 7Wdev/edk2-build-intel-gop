@@ -4,7 +4,6 @@
 
 set -e
 
-gop_bin_dir="/workspace/gop"
 branch=""
 secureboot=""
 image_size=4
@@ -43,9 +42,6 @@ if [ ! -d edk2 ]; then
 fi
 
 cd edk2
-
-cp -f ${gop_bin_dir}/IntelGopDriver.efi OvmfPkg/IntelGop/IntelGopDriver.efi
-cp -f ${gop_bin_dir}/Vbt.bin OvmfPkg/Vbt/Vbt.bin
 
 source edksetup.sh
 
