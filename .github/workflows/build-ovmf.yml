@@ -9,13 +9,16 @@ on:
       vbt_url:
         description: 'URL for Vbt.bin'
         required: true
-
+      build_secure_boot:
+        description: 'Build Secure Boot version (true/false)'
+        required: true
+        default: 'false'
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
 
     - name: Set up Podman
       run: |
@@ -29,14 +32,30 @@ jobs:
         curl -L ${{ github.event.inputs.vbt_url || secrets.VBT_URL }} -o gop/Vbt.bin
 
     - name: Build OVMF
+      if: github.event.inputs.build_secure_boot == 'false'
       run: |
         bash build_ovmf.sh
 
     - name: Upload OVMF artifacts
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
+      if: github.event.inputs.build_secure_boot == 'false'
       with:
         name: ovmf-files
         path: |
           edk2/Build/OvmfX64/DEBUG_GCC5/FV/OVMF_CODE.fd
           edk2/Build/OvmfX64/DEBUG_GCC5/FV/OVMF_VARS.fd
 
+    - name: Build OVMF with Secure Boot
+      if: github.event.inputs.build_secure_boot == 'true'
+      run: |
+        bash build_ovmf.sh -S
+
+    - name: Upload Secure Boot OVMF artifacts
+      if: github.event.inputs.build_secure_boot == 'true'
+      uses: actions/upload-artifact@v4
+      with:
+        name: ovmf-secureboot-files
+        path: |
+          edk2/Build/Ovmf3264/DEBUG_GCC5/FV/OVMF_CODE.fd
+          edk2/Build/Ovmf3264/DEBUG_GCC5/FV/OVMF_VARS.fd
+          edk2/Build/Ovmf3264/DEBUG_GCC5/FV/OVMF_VARS.enrolled.
