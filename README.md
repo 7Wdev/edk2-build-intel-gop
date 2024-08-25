@@ -6,14 +6,16 @@ A build script for building edk2 along with intel-gop using https://github.com/K
 secure boot building steps, ovmf-vars-generator and RedHatSecureBootPkKek1.pem obtained from https://src.fedoraproject.org/rpms/edk2
 
 
-### Building with GitHub actions
+### Building with GitHub actions:
 
  1. Fork this repository
  2. Upload both the GOP and VBT files to some service (like https://filebin.net/)
  3. Run the workflow and provide the URL of the uploaded files
  4. The built OVMF files should be available as an artifact
 
-### usage:
+
+
+### Building it yourself :
 ```
 git clone https://github.com/Kethen/edk2-build-intel-gop
 cd edk2-build-intel-gop
